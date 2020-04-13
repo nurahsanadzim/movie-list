@@ -1,0 +1,24 @@
+<ul>
+
+  <li>Plan to Watch</li>
+  <ol>
+    {% for ptw in plan_to_watch %}
+    <li>{{ ptw }}</li>
+    {% endfor %}
+  </ol>
+  <br>
+  <li>Watched</li>
+  <ol>
+    {% for w in watched %}
+    <li>{{ w }}</li>
+    {% endfor %}
+  </ol>
+  <br>
+  <li>Dropped</li>
+  <ol>
+    {% for d in dropped %}
+    <li>{{ d }}</li>
+    {% endfor %}
+  </ol>
+
+</ul>
