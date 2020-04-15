@@ -12,56 +12,46 @@
 
 {% if movie_data %}
 
-  <form action="{% url 'movies:user_list' %}" method="post">
+{% for movie in movie_data %}
+  <form action="" method="post">
     {% csrf_token %}
     <ol>
-    {% for movie in movie_data %}
       <li>Title: <strong>{{ movie.original_title }}</strong>
         <ul>
           <li>ID: <strong>{{ movie.id }}</strong></li>
           <li>
-            {{ movie.ptw }}
-
-            {% if movie.ptw == 'not_yet' %}
-              <button name="query" type="submit" id="add_button" onclick="return confirm('Tambahkan ke Plan to Watch?')" value="tambah,ptw,{{ movie.id }}">
-              Tambah ke Plan to Watch
+            {% if movie.status == 'not_yet' %}
+              <select name="add" class="opt">
+                <option value="none">Pilih Status</option>
+                <option value="{{ movie.id }},ptw">Plan to Watch</option>
+                <option value="{{ movie.id }},w">Watched</option>
+                <option value="{{ movie.id }},d">Dropped</option>
+              </select>
+              <button disabled value="test" type="submit" onclick="return confirm('Tambahkan ke Plan to Watch?')">
+                Tambah ke list
               </button>
             {% else %}
-              Sudah ditambahkan ke Plan to Watch
+              Sudah ditambahkan ke {{movie.status}}
             {% endif %}
-
-          </li>
-          <li>
-            {{ movie.w }}
-
-            {% if movie.w == 'not_yet' %}
-            <button name="query" type="submit" id="add_button" onclick="return confirm('Tambahkan ke Watched?')" value="tambah,w,{{ movie.id }}">
-            Tambah ke Watched
-            </button>
-            {% else %}
-              Sudah ditambahkan ke Watched
-            {% endif %}
-
-          </li>
-          <li>
-            {{ movie.d }}
-            {% if movie.d == 'not_yet' %}
-            <button name="query" type="submit" id="add_button" onclick="return confirm('Tambahkan ke Dropped')" value="tambah,d,{{ movie.id }}">
-            Tambah ke Dropped
-            </button>
-            {% else %}
-            Sudah ditambahkan ke Dropped
-            {% endif %}
-
           </li>
         </ul>
       </li>
-      <br>
-    {% endfor %}
     </ol>
   </form>
-
+{% endfor %}
+  
 {% else %}
   <h1>No API data fetched</h1>
 {% endif %}
   
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+  $(".opt").change(function() {
+    let button = $(this).next("button");
+    if (this.value == "none") {
+      button.prop("disabled", true)
+    } else {
+      button.prop("disabled", false);
+    } 
+  });
+</script>
