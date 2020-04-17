@@ -1,24 +1,67 @@
 <ul>
 
+
+  
   <li>Plan to Watch</li>
   <ol>
-    {% for ptw in plan_to_watch %}
-    <li>{{ ptw }}</li>
+    {% for ptw in user_list.0 %}
+    <form action="" method="post">
+      {% csrf_token %}
+      <li>{{ ptw }}</li>
+      <ul>
+        <!-- ganti status -->
+        <li>
+          <select name="edit" class="opt">
+            <option selected disabled>Plan to Watch</option>
+            <option value="{{ ptw }},0,1">Watched</option>
+            <option value="{{ ptw }},0,2">Dropped</option>
+          </select>
+          <button disabled value="hapus" type="submit" onclick="return confirm('Edit movie ini?')">
+            Edit status movie
+          </button>
+        </li>
+        <!-- hapus movie -->
+        <li>
+          <button name="delete" id="delete_button" value="{{ ptw }},0" type="submit" onclick="return confirm('Hapus movie ini?')">
+            Hapus
+          </button>
+        </li>
+      </ul>
+    </form>
+
     {% endfor %}
   </ol>
-  <br>
+  
+
+
+
   <li>Watched</li>
   <ol>
-    {% for w in watched %}
+    {% for w in user_list.1 %}
     <li>{{ w }}</li>
     {% endfor %}
   </ol>
   <br>
+
+
+
   <li>Dropped</li>
   <ol>
-    {% for d in dropped %}
+    {% for d in user_list.2 %}
     <li>{{ d }}</li>
     {% endfor %}
   </ol>
 
 </ul>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+$(".opt").change(function() {
+  let button = $(this).next("button");
+  if (this.value == "none") {
+    button.prop("disabled", true)
+  } else {
+    button.prop("disabled", false);
+  } 
+});
+</script>
