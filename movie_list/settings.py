@@ -120,4 +120,4 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_REDIRECT_URL = '' # halaman tujuan setelah user login
+LOGIN_REDIRECT_URL = '/your_list/' # halaman tujuan setelah user login

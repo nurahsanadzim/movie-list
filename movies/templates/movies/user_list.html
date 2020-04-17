@@ -1,5 +1,12 @@
-<ul>
+<li>User: {{ user.username }}</li>
+<li><a href="{% url 'movies:index' %}">Home</a></li>
+<li><a href="{% url 'logout' %}">Logout</a></li>
+<hr>
+<h1 align="center">My List</h1>
+<hr>
 
+
+<ul>
 
   
   <li>Plan to Watch</li>
@@ -28,27 +35,68 @@
         </li>
       </ul>
     </form>
-
     {% endfor %}
   </ol>
   
-
-
+  <hr>
 
   <li>Watched</li>
   <ol>
     {% for w in user_list.1 %}
-    <li>{{ w }}</li>
+    <form action="" method="post">
+      {% csrf_token %}
+      <li>{{ w }}</li>
+      <ul>
+        <!-- ganti status -->
+        <li>
+          <select name="edit" class="opt">
+            <option value="{{ w }},1,0">Plan to Watch</option>
+            <option selected disabled>Watched</option>
+            <option value="{{ w }},1,2">Dropped</option>
+          </select>
+          <button disabled value="hapus" type="submit" onclick="return confirm('Edit movie ini?')">
+            Edit status movie
+          </button>
+        </li>
+        <!-- hapus movie -->
+        <li>
+          <button name="delete" id="delete_button" value="{{ w }},1" type="submit" onclick="return confirm('Hapus movie ini?')">
+            Hapus
+          </button>
+        </li>
+      </ul>
+    </form>
     {% endfor %}
   </ol>
-  <br>
 
-
+  <hr>
 
   <li>Dropped</li>
   <ol>
     {% for d in user_list.2 %}
-    <li>{{ d }}</li>
+    <form action="" method="post">
+      {% csrf_token %}
+      <li>{{ d }}</li>
+      <ul>
+        <!-- ganti status -->
+        <li>
+          <select name="edit" class="opt">
+            <option value="{{ d }},2,0">Plan to Watch</option>
+            <option value="{{ d }},2,1">Watched</option>
+            <option selected disabled>Dropped</option>
+          </select>
+          <button disabled value="hapus" type="submit" onclick="return confirm('Edit movie ini?')">
+            Edit status movie
+          </button>
+        </li>
+        <!-- hapus movie -->
+        <li>
+          <button name="delete" id="delete_button" value="{{ d }},2" type="submit" onclick="return confirm('Hapus movie ini?')">
+            Hapus
+          </button>
+        </li>
+      </ul>
+    </form>
     {% endfor %}
   </ol>
 
@@ -56,6 +104,7 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
+// disable button untuk movie yang tidak diakan diubah
 $(".opt").change(function() {
   let button = $(this).next("button");
   if (this.value == "none") {

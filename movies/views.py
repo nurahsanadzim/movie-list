@@ -57,7 +57,7 @@ def index(request):
         'movie_data': movie_data
     })
 
-
+@login_required
 def user_list(request):
     # cek POST request untuk edit
     post_edit = request.POST.get('edit', 0)
