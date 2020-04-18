@@ -91,9 +91,18 @@ def user_list(request):
     # load data user
     query = UserMovieList.objects.get(user=request.user.id)
     user_list = json.loads(query.user_list)
+
+    # loop request data API menggunakan id yang disimpan di db
+    api_data = [[], [], []]
+    for i, status in enumerate(user_list):
+        for movie_id in status:
+            response = requests.get('https://api.themoviedb.org/3/movie/'+ str(movie_id) +'?api_key=' + key).json()
+            api_data[i].append(response)
+
     return render(request, 'movies/user_list.html', {
-        'user_list': user_list
+        'user_list': api_data
     })
+
 
 
 # 'poster': 'https://image.tmdb.org/t/p/w200'+response['poster_path']

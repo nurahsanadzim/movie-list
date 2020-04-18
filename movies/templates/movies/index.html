@@ -6,11 +6,11 @@
 <hr>
 
 {% if movie_data %}
-
+<ol>
 {% for movie in movie_data %}
   <form action="" method="post">
     {% csrf_token %}
-    <ol>
+ 
       <li>Title: <strong>{{ movie.original_title }}</strong>
         <ul>
           <li>ID: <strong>{{ movie.id }}</strong></li>
@@ -31,10 +31,10 @@
           </li>
         </ul>
       </li>
-    </ol>
+
   </form>
 {% endfor %}
-  
+</ol>
 {% else %}
   <h1>No API data fetched</h1>
 {% endif %}

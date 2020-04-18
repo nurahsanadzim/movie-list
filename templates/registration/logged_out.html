@@ -3,9 +3,16 @@
   <a href="{% url 'login'%}">Masuk kembali</a>
 {% endblock %}
 
+<p>Redirect otomatis setelah 2 detik</p>
 
 <p>
 user: <strong>user1</strong>
 <br>
 password: <strong>rekayasaweb</strong>
 </p>
+
+<script>
+setTimeout(function () {
+  window.location.href = "/"
+}, 2000)
+</script>

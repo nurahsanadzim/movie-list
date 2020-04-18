@@ -14,14 +14,14 @@
     {% for ptw in user_list.0 %}
     <form action="" method="post">
       {% csrf_token %}
-      <li>{{ ptw }}</li>
+      <li>{{ ptw.original_title }}</li>
       <ul>
         <!-- ganti status -->
         <li>
           <select name="edit" class="opt">
             <option selected disabled>Plan to Watch</option>
-            <option value="{{ ptw }},0,1">Watched</option>
-            <option value="{{ ptw }},0,2">Dropped</option>
+            <option value="{{ ptw.id }},0,1">Watched</option>
+            <option value="{{ ptw.id }},0,2">Dropped</option>
           </select>
           <button disabled value="hapus" type="submit" onclick="return confirm('Edit movie ini?')">
             Edit status movie
@@ -29,7 +29,7 @@
         </li>
         <!-- hapus movie -->
         <li>
-          <button name="delete" id="delete_button" value="{{ ptw }},0" type="submit" onclick="return confirm('Hapus movie ini?')">
+          <button name="delete" id="delete_button" value="{{ ptw.id }},0" type="submit" onclick="return confirm('Hapus movie ini?')">
             Hapus
           </button>
         </li>
@@ -45,14 +45,14 @@
     {% for w in user_list.1 %}
     <form action="" method="post">
       {% csrf_token %}
-      <li>{{ w }}</li>
+      <li>{{ w.original_title }}</li>
       <ul>
         <!-- ganti status -->
         <li>
           <select name="edit" class="opt">
-            <option value="{{ w }},1,0">Plan to Watch</option>
+            <option value="{{ w.id }},1,0">Plan to Watch</option>
             <option selected disabled>Watched</option>
-            <option value="{{ w }},1,2">Dropped</option>
+            <option value="{{ w.id }},1,2">Dropped</option>
           </select>
           <button disabled value="hapus" type="submit" onclick="return confirm('Edit movie ini?')">
             Edit status movie
@@ -60,7 +60,7 @@
         </li>
         <!-- hapus movie -->
         <li>
-          <button name="delete" id="delete_button" value="{{ w }},1" type="submit" onclick="return confirm('Hapus movie ini?')">
+          <button name="delete" id="delete_button" value="{{ w.id }},1" type="submit" onclick="return confirm('Hapus movie ini?')">
             Hapus
           </button>
         </li>
@@ -76,13 +76,13 @@
     {% for d in user_list.2 %}
     <form action="" method="post">
       {% csrf_token %}
-      <li>{{ d }}</li>
+      <li>{{ d.original_title }}</li>
       <ul>
         <!-- ganti status -->
         <li>
           <select name="edit" class="opt">
-            <option value="{{ d }},2,0">Plan to Watch</option>
-            <option value="{{ d }},2,1">Watched</option>
+            <option value="{{ d.id }},2,0">Plan to Watch</option>
+            <option value="{{ d.id }},2,1">Watched</option>
             <option selected disabled>Dropped</option>
           </select>
           <button disabled value="hapus" type="submit" onclick="return confirm('Edit movie ini?')">
@@ -91,7 +91,7 @@
         </li>
         <!-- hapus movie -->
         <li>
-          <button name="delete" id="delete_button" value="{{ d }},2" type="submit" onclick="return confirm('Hapus movie ini?')">
+          <button name="delete" id="delete_button" value="{{ d.id }},2" type="submit" onclick="return confirm('Hapus movie ini?')">
             Hapus
           </button>
         </li>
