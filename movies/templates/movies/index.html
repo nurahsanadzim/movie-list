@@ -1,52 +1,198 @@
-<li>User: {{ user.username }}</li>
-<li><a href="{% url 'movies:user_list' %}">My List</a></li>
-<li><a href="{% url 'logout' %}">Logout</a></li>
-<hr>
-<h1 align="center">Trending Today</h1>
-<hr>
+{% load static %}
+<!DOCTYPE html>
+<html>
 
-{% if movie_data %}
-<ol>
-{% for movie in movie_data %}
-  <form action="" method="post">
-    {% csrf_token %}
- 
-      <li>Title: <strong>{{ movie.original_title }}</strong>
-        <ul>
-          <li>ID: <strong>{{ movie.id }}</strong></li>
-          <li>
-            {% if movie.status == 'not_yet' %}
-              <select name="add" class="opt">
-                <option value="none">Pilih Status</option>
-                <option value="{{ movie.id }},ptw">Plan to Watch</option>
-                <option value="{{ movie.id }},w">Watched</option>
-                <option value="{{ movie.id }},d">Dropped</option>
-              </select>
-              <button disabled value="test" type="submit" onclick="return confirm('Tambahkan ke Plan to Watch?')">
-                Tambah ke list
-              </button>
-            {% else %}
-              Sudah ditambahkan ke {{movie.status}}
-            {% endif %}
-          </li>
-        </ul>
-      </li>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Movie List Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="{% static 'fontawesome-free/css/all.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/adminlte.min.css' %}">
+  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+</head>
 
-  </form>
-{% endfor %}
-</ol>
-{% else %}
-  <h1>No API data fetched</h1>
-{% endif %}
-  
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script>
-  $(".opt").change(function() {
-    let button = $(this).next("button");
-    if (this.value == "none") {
-      button.prop("disabled", true)
-    } else {
-      button.prop("disabled", false);
-    } 
-  });
-</script>
+<body class="hold-transition sidebar-mini">
+  <!-- Site wrapper -->
+  <div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+      <!-- Left navbar links -->
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+      </ul>
+    </nav>
+    <!-- /.navbar -->
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <!-- Sidebar -->
+      <div class="sidebar">
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+            <li class="nav-item">
+              <a class="nav-link">
+                <i class="nav-icon fas fa-user"></i>
+                <p>
+                  {{ user.username }}
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'movies:user_list' %}" class="nav-link">
+                <i class="nav-icon far fa-list-alt"></i>
+                <p>
+                  My List
+                </p>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'logout' %}" class="nav-link">
+                <i class="nav-icon fas fa-sign-out-alt"></i>
+                <p>
+                  Logout
+                </p>
+              </a>
+            </li>
+
+          </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+      </div>
+      <!-- /.sidebar -->
+    </aside>
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row mb-2">
+            <div class="col-sm-12 text-center">
+              <h1>Trending Today</h1>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
+
+      {% if movie_data %}
+      <!-- Main content -->
+      <section class="content">
+
+        <!-- Default box -->
+        <div class="card card-solid">
+          <div class="card-body pb-0">
+            <div class="row d-flex align-items-stretch">
+
+              {% for movie in movie_data %}
+
+
+              <!-- card entry, loop this -->
+              <div class="col-12 col-sm-6 col-md-3 d-flex align-items-stretch">
+                <div class="card bg-light">
+                  <p class="text-center mt-1">
+                    {{ movie.original_title }}
+                  </p>
+                  <div class="card-body pt-0">
+                    <div class="row">
+                      <div class="col-12 text-center">
+                        <img src="https://image.tmdb.org/t/p/w200{{ movie.poster_path }}">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer">
+                    <div class="text-right">
+                      <div class="text-center">
+
+                        {% if movie.status == 'not_yet' %}
+                        <form action="" method="post">
+                        {% csrf_token %}
+                        <div class="btn-group">
+                          <select name="add" class="form-control opt">
+                            <option value="none">Pilih Status</option>
+                            <option value="{{ movie.id }},ptw">Planned</option>
+                            <option value="{{ movie.id }},w">Watched</option>
+                            <option value="{{ movie.id }},d">Dropped</option>
+                          </select>
+                          <button disabled type="submit" class="btn btn-primary" onclick="return confirm('Tambahkan ke List?')">
+                            Tambah
+                          </button>
+                        </div>
+                        </form> 
+                        
+                        {% else %}
+                          <button disabled class="btn btn-primary">{{movie.status}}</button>
+                        {% endif %}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- entry end -->
+
+
+              {% endfor %}
+
+            </div>
+            <!-- /.card-body -->
+            <div class="card-footer">
+              <nav aria-label="Contacts Page Navigation">
+                <ul class="pagination justify-content-center m-0">
+                </ul>
+              </nav>
+            </div>
+            <!-- /.card-footer -->
+          </div>
+        </div>
+        <!-- /.card -->
+
+      </section>
+      <!-- /.content -->
+      {% else %}
+      <h1>No API data fetched</h1>
+      {% endif %}
+      
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer class="main-footer">
+      <div class="float-right d-none d-sm-block">
+        <b>Version</b> 3.0.4
+      </div>
+      <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong> All rights
+      reserved.
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <!-- ./wrapper -->
+
+  <script src="https://code.jquery.com/jquery-3.5.0.min.js"
+    integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <script src="{% static 'js/adminlte.min.js' %}"></script>
+  <script>
+    $(".opt").change(function() {
+      let button = $(this).next("button");
+      if (this.value == "none") {
+        button.prop("disabled", true)
+      } else {
+        button.prop("disabled", false);
+      } 
+    });
+  </script>
+</body>
+
+</html>

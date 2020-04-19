@@ -43,13 +43,13 @@ def index(request):
         for movie in movie_data:
             # plan to watch
             if movie['id'] in user_list[0]:
-                movie['status'] = 'ptw'
+                movie['status'] = 'Planned'
             # watched
             elif movie['id'] in user_list[1]:
-                movie['status'] = 'w'
+                movie['status'] = 'Watched'
             # dropped
             elif movie['id'] in user_list[2]:
-                movie['status'] = 'd'
+                movie['status'] = 'Dropped'
             else:
                 movie['status'] = 'not_yet'
     # render ke template
@@ -105,4 +105,4 @@ def user_list(request):
 
 
 
-# 'poster': 'https://image.tmdb.org/t/p/w200'+response['poster_path']
+# <img src="https://image.tmdb.org/t/p/w200{{ movie.poster_path }}">

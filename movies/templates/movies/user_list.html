@@ -1,116 +1,317 @@
-<li>User: {{ user.username }}</li>
-<li><a href="{% url 'movies:index' %}">Home</a></li>
-<li><a href="{% url 'logout' %}">Logout</a></li>
-<hr>
-<h1 align="center">My List</h1>
-<hr>
+{% load static %}
+<!DOCTYPE html>
+<html>
 
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>My List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'fontawesome-free/css/all.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/adminlte.min.css' %}">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  </head>
 
-<ul>
-
-  
-  <li>Plan to Watch</li>
-  <ol>
-    {% for ptw in user_list.0 %}
-    <form action="" method="post">
-      {% csrf_token %}
-      <li>{{ ptw.original_title }}</li>
-      <ul>
-        <!-- ganti status -->
-        <li>
-          <select name="edit" class="opt">
-            <option selected disabled>Plan to Watch</option>
-            <option value="{{ ptw.id }},0,1">Watched</option>
-            <option value="{{ ptw.id }},0,2">Dropped</option>
-          </select>
-          <button disabled value="hapus" type="submit" onclick="return confirm('Edit movie ini?')">
-            Edit status movie
-          </button>
-        </li>
-        <!-- hapus movie -->
-        <li>
-          <button name="delete" id="delete_button" value="{{ ptw.id }},0" type="submit" onclick="return confirm('Hapus movie ini?')">
-            Hapus
-          </button>
+<body class="hold-transition sidebar-mini">
+  <!-- Site wrapper -->
+  <div class="wrapper">
+    <!-- Navbar -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+      <!-- Left navbar links -->
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
         </li>
       </ul>
-    </form>
-    {% endfor %}
-  </ol>
-  
-  <hr>
+    </nav>
+    <!-- /.navbar -->
 
-  <li>Watched</li>
-  <ol>
-    {% for w in user_list.1 %}
-    <form action="" method="post">
-      {% csrf_token %}
-      <li>{{ w.original_title }}</li>
-      <ul>
-        <!-- ganti status -->
-        <li>
-          <select name="edit" class="opt">
-            <option value="{{ w.id }},1,0">Plan to Watch</option>
-            <option selected disabled>Watched</option>
-            <option value="{{ w.id }},1,2">Dropped</option>
-          </select>
-          <button disabled value="hapus" type="submit" onclick="return confirm('Edit movie ini?')">
-            Edit status movie
-          </button>
-        </li>
-        <!-- hapus movie -->
-        <li>
-          <button name="delete" id="delete_button" value="{{ w.id }},1" type="submit" onclick="return confirm('Hapus movie ini?')">
-            Hapus
-          </button>
-        </li>
-      </ul>
-    </form>
-    {% endfor %}
-  </ol>
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+      <!-- Sidebar -->
+      <div class="sidebar">
+        <!-- Sidebar user (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+          <div class="info">
+            <a class="d-block">User1</a>
+          </div>
+        </div>
 
-  <hr>
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+            <li class="nav-item">
+              <a class="nav-link">
+                <i class="nav-icon fas fa-user"></i>
+                <p>
+                  {{ user.username }}
+                </p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'movies:index' %}" class="nav-link">
+                <i class="nav-icon far fa-list-alt"></i>
+                <p>
+                  Home
+                </p>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'logout' %}" class="nav-link">
+                <i class="nav-icon fas fa-sign-out-alt"></i>
+                <p>
+                  Logout
+                </p>
+              </a>
+            </li>
 
-  <li>Dropped</li>
-  <ol>
-    {% for d in user_list.2 %}
-    <form action="" method="post">
-      {% csrf_token %}
-      <li>{{ d.original_title }}</li>
-      <ul>
-        <!-- ganti status -->
-        <li>
-          <select name="edit" class="opt">
-            <option value="{{ d.id }},2,0">Plan to Watch</option>
-            <option value="{{ d.id }},2,1">Watched</option>
-            <option selected disabled>Dropped</option>
-          </select>
-          <button disabled value="hapus" type="submit" onclick="return confirm('Edit movie ini?')">
-            Edit status movie
-          </button>
-        </li>
-        <!-- hapus movie -->
-        <li>
-          <button name="delete" id="delete_button" value="{{ d.id }},2" type="submit" onclick="return confirm('Hapus movie ini?')">
-            Hapus
-          </button>
-        </li>
-      </ul>
-    </form>
-    {% endfor %}
-  </ol>
+          </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+      </div>
+      <!-- /.sidebar -->
+    </aside>
 
-</ul>
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+      <!-- Content Header (Page header) -->
+      <section class="content-header">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-12 text-center">
+              <h1>Your List</h1>
+            </div>
+          </div>
+        </div><!-- /.container-fluid -->
+      </section>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script>
-// disable button untuk movie yang tidak diakan diubah
-$(".opt").change(function() {
-  let button = $(this).next("button");
-  if (this.value == "none") {
-    button.prop("disabled", true)
-  } else {
-    button.prop("disabled", false);
-  } 
-});
-</script>
+      <!-- Main content -->
+      <section class="content">
+
+        <!-- Default box -->
+        <div class="card-body pb-0">
+
+          <div class="card card-primary card-outline card-outline-tabs">
+            <div class="card-header p-0 border-bottom-0">
+              <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill"
+                    href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home"
+                    aria-selected="true">Planned</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill"
+                    href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile"
+                    aria-selected="false">Watched</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="custom-tabs-four-messages-tab" data-toggle="pill"
+                    href="#custom-tabs-four-messages" role="tab" aria-controls="custom-tabs-four-messages"
+                    aria-selected="false">Dropped</a>
+                </li>
+              </ul>
+            </div>
+            <div class="card-body">
+              <div class="tab-content" id="custom-tabs-four-tabContent">
+                <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel"
+                  aria-labelledby="custom-tabs-four-home-tab">
+
+
+                  <div class="row d-flex align-items-stretch">
+
+                    <!-- card entry -->
+                    {% for ptw in user_list.0 %}
+                    <div class="col-12 col-sm-6 col-md-3 d-flex align-items-stretch">
+                      <div class="card bg-light">
+                        <div class="font-weight-normal lead card-header border-bottom-0">
+                          {{ ptw.original_title }}
+                        </div>
+                        <div class="card-body pt-0">
+                          <div class="row">
+                            <div class="col-12 text-center">
+                              <img src="https://image.tmdb.org/t/p/w200{{ ptw.poster_path }}" class="img-fluid">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card-footer">
+                          <div class="text-right">
+                            <div class="text-center">
+
+                              <form action="" method="post">
+                                {% csrf_token %}
+                                <div class="btn-group">
+                                  <select name="edit" class="form-control opt">
+                                    <option selected disabled>Planned</option>
+                                    <option value="{{ ptw.id }},0,1">Watched</option>
+                                    <option value="{{ ptw.id }},0,2">Dropped</option>
+                                  </select>
+                                  <button disabled class="btn btn-primary" value="hapus" type="submit" onclick="return confirm('Edit movie ini?')">
+                                    Edit
+                                  </button>
+                                </div>
+                                <button class="mt-1 btn btn-danger btn-block" name="delete" id="delete_button" value="{{ ptw.id }},0" type="submit" onclick="return confirm('Hapus movie ini?')">
+                                  Hapus
+                                </button>
+                              </form>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                    <!-- card entry end (each) -->
+                  </div>
+
+                </div>
+                <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
+                  aria-labelledby="custom-tabs-four-profile-tab">
+                  <div class="row d-flex align-items-stretch">
+
+                    {% for w in user_list.1 %}
+                    <div class="col-12 col-sm-6 col-md-3 d-flex align-items-stretch">
+                      <div class="card bg-light">
+                        <div class="font-weight-normal lead card-header border-bottom-0">
+                          {{ w.original_title }}
+                        </div>
+                        <div class="card-body pt-0">
+                          <div class="row">
+                            <div class="col-12 text-center">
+                              <img src="https://image.tmdb.org/t/p/w200{{ w.poster_path }}" class="img-fluid">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card-footer">
+                          <div class="text-right">
+                            <div class="text-center">
+
+                              <form action="" method="post">
+                                {% csrf_token %}
+                                <div class="btn-group">
+                                  <select name="edit" class="form-control opt">
+                                    <option value="{{ w.id }},1,0">Planned</option>
+                                    <option selected disabled>Watched</option>
+                                    <option value="{{ w.id }},1,2">Dropped</option>
+                                  </select>
+                                  <button disabled class="btn btn-primary" value="hapus" type="submit" onclick="return confirm('Edit movie ini?')">
+                                    Edit
+                                  </button>
+                                </div>
+                                <button class="mt-1 btn btn-danger btn-block" name="delete" id="delete_button" value="{{ w.id }},1" type="submit" onclick="return confirm('Hapus movie ini?')">
+                                  Hapus
+                                </button>
+                              </form>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="custom-tabs-four-messages" role="tabpanel"
+                  aria-labelledby="custom-tabs-four-messages-tab">
+                  <div class="row d-flex align-items-stretch">
+
+
+                    {% for d in user_list.2 %}
+                    <div class="col-12 col-sm-6 col-md-3 d-flex align-items-stretch">
+                      <div class="card bg-light">
+                        <div class="font-weight-normal lead card-header border-bottom-0">
+                          {{ d.original_title }}
+                        </div>
+                        <div class="card-body pt-0">
+                          <div class="row">
+                            <div class="col-12 text-center">
+                              <img src="https://image.tmdb.org/t/p/w200{{ d.poster_path }}" class="img-fluid">
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card-footer">
+                          <div class="text-right">
+                            <div class="text-center">
+
+                              <form action="" method="post">
+                                {% csrf_token %}
+                                <div class="btn-group">
+                                  <select name="edit" class="form-control opt">
+                                    <option value="{{ d.id }},2,0">Planned</option>
+                                    <option value="{{ d.id }},2,1">Watched</option>
+                                    <option selected disabled>Dropped</option>
+                                  </select>
+                                  <button disabled class="btn btn-primary" value="hapus" type="submit" onclick="return confirm('Edit movie ini?')">
+                                    Edit
+                                  </button>
+                                </div>
+                                <button class="mt-1 btn btn-danger btn-block" name="delete" id="delete_button" value="{{ d.id }},2" type="submit" onclick="return confirm('Hapus movie ini?')">
+                                  Hapus
+                                </button>
+                              </form>
+
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <!-- /.card -->
+          </div>
+
+
+
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+
+      </section>
+      <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+
+    <footer class="main-footer">
+      <div class="float-right d-none d-sm-block">
+        <b>Version</b> 3.0.4
+      </div>
+      <strong>Copyright &copy; 2014-2019 <a href="http://adminlte.io">AdminLTE.io</a>.</strong> All rights
+      reserved.
+    </footer>
+
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      <!-- Control sidebar content goes here -->
+    </aside>
+    <!-- /.control-sidebar -->
+  </div>
+  <!-- ./wrapper -->
+
+
+  <script src="https://code.jquery.com/jquery-3.5.0.min.js"
+    integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <script src="{% static 'js/adminlte.min.js' %}"></script>
+  <script>
+    // disable button untuk movie yang tidak diakan diubah
+    $(".opt").change(function() {
+      let button = $(this).next("button");
+      if (this.value == "none") {
+        button.prop("disabled", true)
+      } else {
+        button.prop("disabled", false);
+      } 
+    });
+  </script>
+</body>
+
+</html>
